@@ -3,7 +3,7 @@
 
 require 'vendor/autoload.php';
 $client = Elasticsearch\ClientBuilder::create()->build();
-$qw = 'dell inspiron memory test';
+$qw = 'set up';
 
 $params = [
     'index' => 'you_key_new',
