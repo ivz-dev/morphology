@@ -16,7 +16,7 @@ $st = $db->query('SELECT max(id) FROM allkeys');
 $result = $st->fetch(PDO::FETCH_ASSOC);
 
 $max_count = $result['max(id)']; // количество записей в таблице
-$count_req=15000; //количество записей, для обработки в одном запросе
+$count_req=50000; //количество записей, для обработки в одном запросе
 
 //расчет количества потоков
 $count = ceil($max_count/$count_req);
@@ -36,7 +36,7 @@ for($i = 0; $i<=$count; $i++){
             $to = $max_count;
         }
 
-        $sh.= "php /var/www/es/html/new_trigram.php $from $to &";
+        $sh.= "php /var/www/es/html/write_base_to_elastic.php $from $to &";
 
     }
 }

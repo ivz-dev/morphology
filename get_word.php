@@ -3,13 +3,19 @@
 use Elasticsearch\ClientBuilder;
 require 'vendor/autoload.php';
 $client = ClientBuilder::create()->build();
-
+$qw = 'download';
 $params = [
-    'index' => 'unic_word',
+    'index' => 'you_key_new',
     'type' => 'key',
-    'version'=>true,
-    'from' => 95,
-    'size' => 100,
+    'from' => 0,
+    'size' => 45,
+    'body' => [
+        'query' => [
+            'match' => [
+                'key' => $qw
+            ]
+        ]
+    ]
 ];
 
 $response = $client->search($params);

@@ -19,12 +19,13 @@ catch (PDOException $e){
 
 $select = $db->prepare("SELECT * FROM `unic_word` WHERE `count`>=40 ORDER by `count` DESC");
 $select->execute();
-
 $result = $select->fetchAll(PDO::FETCH_ASSOC);
-$insert = $db->prepare("INSERT INTO `unic_word` (keys) VALUES (:key) WHERE id=:id ");
+
+$insert = $db->prepare("UPDATE `unic_word` SET `keys`=:key WHERE `id`=:id");
 
 
 foreach ($result as $item){
+
     $qw = $item['word'];
     $id = $item['id'];
 
@@ -32,7 +33,7 @@ foreach ($result as $item){
         'index' => 'you_key_new',
         'type' => 'key',
         'from' => 0,
-        'size' => 5,
+        'size' => 25,
         'body' => [
             'query' => [
                 'match' => [
@@ -42,10 +43,15 @@ foreach ($result as $item){
         ]
     ];
 
-
+    $response = $client->search($params);
+    $keys ='';
     foreach ($response['hits']['hits'] as $key=>$value){
-        echo $value['_source']['token']."<br>";
+        $keys .= trim($value['_source']['token']).",";
     }
+
+    $insert->bindParam(":key", $keys);
+    $insert->bindParam(":id", $id);
+    $insert->execute();
 }
 
 
